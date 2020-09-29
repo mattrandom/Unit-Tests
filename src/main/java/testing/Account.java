@@ -1,7 +1,6 @@
-package mattrandom.testing;
+package testing;
 
 public class Account {
-
     private boolean active;
 
     public Account() {
@@ -15,6 +14,4 @@ public class Account {
     public boolean isActive() {
         return this.active;
     }
-
-
 }

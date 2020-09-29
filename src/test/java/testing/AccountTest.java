@@ -1,14 +1,14 @@
-package mattrandom.testing;
+package testing;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AccountTest {
+class AccountTest {
 
     @Test
-    public void newAccountShouldNotBeActiveAfterCreation() {
+    void newAccountShouldNotBeActiveAfterCreation() {
         //given
         Account newAccount = new Account();
 
@@ -17,7 +17,7 @@ public class AccountTest {
     }
 
     @Test
-    public void accountShouldBeActiveAfterActivation() {
+    void accountShouldBeActiveAfterActivation() {
         //given
         Account newAccount = new Account();
 
