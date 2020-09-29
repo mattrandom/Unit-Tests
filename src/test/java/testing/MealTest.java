@@ -2,6 +2,7 @@ package testing;
 
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MealTest {
@@ -16,6 +17,7 @@ class MealTest {
 
         //then
         assertEquals(45, discountedPrice);
+        assertThat(discountedPrice).isEqualTo(45);
     }
 
     @Test
