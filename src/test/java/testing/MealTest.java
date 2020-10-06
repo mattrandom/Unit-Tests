@@ -1,9 +1,11 @@
 package testing;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MealTest {
 
@@ -48,5 +50,14 @@ class MealTest {
 
         //then
         assertEquals(meal1, meal2);
+    }
+
+    @Test
+    void exceptionShouldBeThrownIfDiscountIsHigherThanThePrice() {
+        //given
+        Meal mealExc = new Meal(30, "Tikka Masala");
+
+        //when & then
+        assertThrows(IllegalArgumentException.class, () -> mealExc.getDiscountedPrice(35));
     }
 }
