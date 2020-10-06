@@ -17,4 +17,8 @@ public class Order {
     public List<Meal> getMeals() {
         return meals;
     }
+
+    public void cancel() {
+        this.meals.clear();
+    }
 }
