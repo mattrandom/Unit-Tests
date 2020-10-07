@@ -39,4 +39,12 @@ public class Meal {
     public int hashCode() {
         return Objects.hash(price, name);
     }
+
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "price=" + price +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
