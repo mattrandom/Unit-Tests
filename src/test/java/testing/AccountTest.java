@@ -1,10 +1,12 @@
 package testing;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 class AccountTest {
 
@@ -60,5 +62,22 @@ class AccountTest {
         //then
         assertNotNull(defaultAddress);
         assertThat(defaultAddress, is(notNullValue()));
+    }
+
+    @RepeatedTest(5)
+    void newAccountWithNotNullAddressShouldBeActive() {
+        //given
+        Address defaultAddress = new Address("Posen Avenue", "66");
+
+        //when
+        Account account = new Account(defaultAddress);
+
+        //then
+        assumingThat(defaultAddress != null, () -> {
+            assertTrue(account.isActive());
+            assertThat(account.isActive(), is(true));
+            assertNotNull(defaultAddress);
+            assertThat(defaultAddress, is(notNullValue()));
+        });
     }
 }
