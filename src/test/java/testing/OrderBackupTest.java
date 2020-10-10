@@ -29,10 +29,11 @@ class OrderBackupTest {
         orderBackup.getWriter().append(" backed up.");
     }
 
+    @Tag("fries")
     @Test
     void backUpOrderWithOneMeal() throws IOException {
         //given
-        Meal meal = new Meal(20, "Spaghetti");
+        Meal meal = new Meal(20, "Fries");
         Order order = new Order();
         order.addMealToOrder(meal);
 
