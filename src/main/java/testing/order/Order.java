@@ -1,4 +1,6 @@
-package testing;
+package testing.order;
+
+import testing.Meal;
 
 import java.util.ArrayList;
 import java.util.List;

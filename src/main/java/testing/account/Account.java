@@ -1,4 +1,4 @@
-package testing;
+package testing.account;
 
 public class Account {
     private boolean active;
@@ -40,5 +40,9 @@ public class Account {
         } else {
             throw new IllegalArgumentException("Wrong e-mail format");
         }
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

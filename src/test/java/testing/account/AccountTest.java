@@ -1,7 +1,9 @@
-package testing;
+package testing.account;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import testing.account.Account;
+import testing.account.Address;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -89,5 +91,22 @@ class AccountTest {
         //when
         //then
         assertThrows(IllegalArgumentException.class, () -> account.setEmail("wrongEmail"));
+    }
+
+    @Test
+    void validEmailShouldBeSet() {
+        //given
+        Account account = new Account();
+
+        //when
+        account.setEmail("username123@gmail.com");
+
+        //then
+        assertThat(account.getEmail(), is("username123@gmail.com"));
+
+        assertThat(account.getEmail(), matchesRegex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"));
+
+        //when & then
+        assertDoesNotThrow(() -> account.setEmail("username123@gmail.com"));
     }
 }

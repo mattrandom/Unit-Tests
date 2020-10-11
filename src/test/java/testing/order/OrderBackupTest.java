@@ -1,6 +1,9 @@
-package testing;
+package testing.order;
 
 import org.junit.jupiter.api.*;
+import testing.Meal;
+import testing.order.Order;
+import testing.order.OrderBackup;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,7 +37,7 @@ class OrderBackupTest {
     void backUpOrderWithOneMeal() throws IOException {
         //given
         Meal meal = new Meal(20, "Fries");
-        Order order = new Order();
+        testing.order.Order order = new Order();
         order.addMealToOrder(meal);
 
         //when
