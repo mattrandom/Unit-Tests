@@ -1,7 +1,8 @@
-package testing;
+package testing.cart;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import testing.Meal;
 import testing.order.Order;
 
 import java.time.Duration;
