@@ -10,8 +10,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 
 class CartServiceTest {
@@ -175,5 +175,91 @@ class CartServiceTest {
 
         assertThat(resultCart.getOrders(), hasSize(1));
         assertThat(resultCart.getOrders().get(0).getOrderStatus(), equalTo(OrderStatus.PREPARING));
+    }
+
+    @Test
+    void shouldDoNothingWhenProcessCart() {
+        //given
+        Order order = new Order();
+        Cart cart = new Cart();
+        cart.addOrderToCart(order);
+
+        CartHandler cartHandlerMock = mock(CartHandler.class);
+        CartService cartService = new CartService(cartHandlerMock);
+
+        given(cartHandlerMock.canHandleCart(cart)).willReturn(true);
+
+        doNothing().when(cartHandlerMock).sendToPrepare(cart);
+        willDoNothing().given(cartHandlerMock).sendToPrepare(cart);
+        willDoNothing().willThrow(IllegalStateException.class).given(cartHandlerMock).sendToPrepare(cart);
+
+        //when
+        Cart resultCart = cartService.processCart(cart);
+
+        //then
+        then(cartHandlerMock).should().sendToPrepare(cart);
+        assertThat(resultCart.getOrders(), hasSize(1));
+        assertThat(resultCart.getOrders().get(0).getOrderStatus(), equalTo(OrderStatus.PREPARING));
+    }
+
+    @Test
+    void shouldAnswerWhenProcessCart() {
+        //given
+        Order order = new Order();
+        Cart cart = new Cart();
+        cart.addOrderToCart(order);
+
+        CartHandler cartHandlerMock = mock(CartHandler.class);
+        CartService cartService = new CartService(cartHandlerMock);
+
+        doAnswer(invocationOnMock -> {
+            Cart argumentCart = invocationOnMock.getArgument(0);
+            argumentCart.clearCart();
+            return true;
+        }).when(cartHandlerMock).canHandleCart(cart);
+
+        when(cartHandlerMock.canHandleCart(cart)).then(invocation -> {
+            Cart argumentCart = invocation.getArgument(0);
+            argumentCart.clearCart();
+            return true;
+        });
+
+        willAnswer(invocationOnMock -> {
+            Cart argumentCart = invocationOnMock.getArgument(0);
+            argumentCart.clearCart();
+            return true;
+        }).given(cartHandlerMock).canHandleCart(cart);
+
+        given(cartHandlerMock.canHandleCart(cart)).will(invocation -> {
+            Cart argumentCart = invocation.getArgument(0);
+            argumentCart.clearCart();
+            return true;
+        });
+
+        //when
+        Cart resultCart = cartService.processCart(cart);
+
+        //then
+        then(cartHandlerMock).should().sendToPrepare(cart);
+        assertThat(resultCart.getOrders().size(), equalTo(0));
+    }
+
+    @Test
+    void deliveryShouldBeFree() {
+        //given
+        Cart cart = new Cart();
+        cart.addOrderToCart(new Order());
+        cart.addOrderToCart(new Order());
+        cart.addOrderToCart(new Order());
+
+        CartHandler cartHandlerMock = mock(CartHandler.class);
+        given(cartHandlerMock.isDeliveryFree(cart)).willCallRealMethod();
+        doCallRealMethod().when(cartHandlerMock).isDeliveryFree(cart);
+
+        //when
+        boolean isDeliveryFree = cartHandlerMock.isDeliveryFree(cart);
+
+        //then
+        assertTrue(isDeliveryFree);
     }
 }
