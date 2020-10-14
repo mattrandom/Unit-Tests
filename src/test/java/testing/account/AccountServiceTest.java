@@ -1,18 +1,20 @@
 package testing.account;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyCollectionOf;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.when;
 import static org.mockito.Mockito.mock;
 
+@MockitoSettings(strictness = Strictness.STRICT_STUBS)
 class AccountServiceTest {
 
     @Test
@@ -58,5 +60,20 @@ class AccountServiceTest {
         //then
         assertThat(noActiveAccountsList, emptyCollectionOf(Account.class)); // I
         assertThat(noActiveAccountsList, hasSize(0)); // II
+    }
+
+    @Test
+    void getAccountsByName() {
+        //given
+        AccountRepository accountRepositoryMock = mock(AccountRepository.class);
+        AccountService accountService = new AccountService(accountRepositoryMock);
+
+        given(accountRepositoryMock.getByName("Mateo")).willReturn(Collections.singletonList("Random"));
+
+        //when
+        List<String> accountsName = accountService.findByName("Mateo");
+
+        //then
+        assertThat(accountsName, contains("Random"));
     }
 }
