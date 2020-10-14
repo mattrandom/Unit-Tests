@@ -7,6 +7,9 @@ public class Meal {
     private int quantity;
     private String name;
 
+    public Meal() {
+    }
+
     public Meal(int price) {
         this.price = price;
     }
