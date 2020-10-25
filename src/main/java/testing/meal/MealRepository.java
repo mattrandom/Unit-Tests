@@ -1,6 +1,7 @@
 package testing.meal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,9 +35,36 @@ public class MealRepository {
         return result;
     }
 
-    public List<Meal> findByPrice(int price) {
-        return meals.stream()
-                .filter(meal -> meal.getPrice() == price)
-                .collect(Collectors.toList());
+    public List<Meal> findByPrice(int price, PriceSearchType priceType) {
+        return findByPriceWithInitialData(price, priceType, meals);
+    }
+
+    private List<Meal> findByPriceWithInitialData(int price, PriceSearchType priceType, List<Meal> initialData) {
+        List<Meal> result = new ArrayList<>();
+
+        switch (priceType) {
+            case LOWER:
+                result = initialData.stream()
+                        .filter(meal -> meal.getPrice() < price)
+                        .collect(Collectors.toList());
+                break;
+            case EQUAL:
+                result = initialData.stream()
+                        .filter(meal -> meal.getPrice() == price)
+                        .collect(Collectors.toList());
+                break;
+            case HIGHER:
+                result = initialData.stream()
+                        .filter(meal -> meal.getPrice() > price)
+                        .collect(Collectors.toList());
+                break;
+        }
+        return result;
+    }
+
+    public List<Meal> find(String name, boolean exactName, int price, PriceSearchType priceType) {
+        List<Meal> nameMatches = findByName(name, exactName);
+
+        return findByPriceWithInitialData(price, priceType, nameMatches);
     }
 }

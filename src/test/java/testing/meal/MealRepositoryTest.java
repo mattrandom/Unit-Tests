@@ -11,10 +11,10 @@ import static org.hamcrest.Matchers.*;
 
 class MealRepositoryTest {
 
-     private MealRepository mealRepository;
+    private MealRepository mealRepository;
 
     @BeforeEach
-     void init() {
+    void init() {
         mealRepository = new MealRepository();
     }
 
@@ -83,14 +83,126 @@ class MealRepositoryTest {
         //given
         Meal meal = new Meal(10, "Pizza");
         Meal meal2 = new Meal(15, "Burger");
+        Meal meal3 = new Meal(20, "Spaghetti");
+        mealRepository.add(meal);
+        mealRepository.add(meal2);
+        mealRepository.add(meal3);
+
+        //when
+        List<Meal> resultOfEqualPrice = mealRepository.findByPrice(15, PriceSearchType.EQUAL);
+        List<Meal> resultOfLowerPrice = mealRepository.findByPrice(15, PriceSearchType.LOWER);
+        List<Meal> resultOfHigherPrice = mealRepository.findByPrice(15, PriceSearchType.HIGHER);
+
+        //then
+        assertThat(resultOfEqualPrice, hasSize(1));
+        assertThat(resultOfEqualPrice.get(0).getName(), equalTo(meal2.getName()));
+
+        assertThat(resultOfLowerPrice, hasSize(1));
+        assertThat(resultOfLowerPrice.get(0).getName(), equalTo(meal.getName()));
+
+        assertThat(resultOfHigherPrice, hasSize(1));
+        assertThat(resultOfHigherPrice.get(0).getName(), equalTo(meal3.getName()));
+    }
+
+    @Test
+    void shouldFindByExactNameAndExactPrice() {
+        //given
+        Meal meal = new Meal(10, "Pizza");
+        Meal meal2 = new Meal(9, "Burger");
+
         mealRepository.add(meal);
         mealRepository.add(meal2);
 
         //when
-        List<Meal> results = mealRepository.findByPrice(15);
+        List<Meal> results = mealRepository.find("Pizza", true, 10, PriceSearchType.EQUAL);
 
         //then
-        assertThat(results, hasSize(1));
-        assertThat(results.get(0).getName(), equalTo("Burger"));
+        assertThat(results.size(), is(1));
+        assertThat(results.get(0), is(meal));
+    }
+
+    @Test
+    void shouldFindByFirstLetterAndExactPrice() {
+        //given
+        Meal meal = new Meal(10, "Pizza");
+        Meal meal2 = new Meal(9, "Burger");
+
+        mealRepository.add(meal);
+        mealRepository.add(meal2);
+
+        //when
+        List<Meal> results = mealRepository.find("B", false, 9, PriceSearchType.EQUAL);
+
+        //then
+        assertThat(results.size(), is(1));
+        assertThat(results.get(0), is(meal2));
+    }
+
+    @Test
+    void shouldFindByExactNameAndLowerPrice() {
+        //given
+        Meal meal = new Meal(10, "Pizza");
+        Meal meal2 = new Meal(9, "Burger");
+
+        mealRepository.add(meal);
+        mealRepository.add(meal2);
+
+        //when
+        List<Meal> results = mealRepository.find("Pizza", true, 11, PriceSearchType.LOWER);
+
+        //then
+        assertThat(results.size(), is(1));
+        assertThat(results.get(0), is(meal));
+    }
+
+    @Test
+    void shouldFindByFirstLetterAndLowerPrice() {
+        //given
+        Meal meal = new Meal(10, "Pizza");
+        Meal meal2 = new Meal(9, "Burger");
+
+        mealRepository.add(meal);
+        mealRepository.add(meal2);
+
+        //when
+        List<Meal> results = mealRepository.find("B", false, 10, PriceSearchType.LOWER);
+
+        //then
+        assertThat(results.size(), is(1));
+        assertThat(results.get(0), is(meal2));
+    }
+
+    @Test
+    void shouldFindByExactNameAndHigherPrice() {
+        //given
+        Meal meal = new Meal(10, "Pizza");
+        Meal meal2 = new Meal(9, "Burger");
+
+        mealRepository.add(meal);
+        mealRepository.add(meal2);
+
+        //when
+        List<Meal> results = mealRepository.find("Pizza", true, 9, PriceSearchType.HIGHER);
+
+        //then
+        assertThat(results.size(), is(1));
+        assertThat(results.get(0), is(meal));
+    }
+
+    @Test
+    void shouldFindByFirstLetterAndHigherPrice() {
+        //given
+        Meal meal = new Meal(10, "Pizza");
+        Meal meal2 = new Meal(9, "Burger");
+
+        mealRepository.add(meal);
+        mealRepository.add(meal2);
+
+        //when
+        List<Meal> results = mealRepository.find("B", false, 8, PriceSearchType.HIGHER);
+
+        //then
+        assertThat(results.size(), is(1));
+        assertThat(results.get(0), is(meal2));
     }
 }
