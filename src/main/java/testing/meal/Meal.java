@@ -1,4 +1,4 @@
-package testing;
+package testing.meal;
 
 import java.util.Objects;
 
@@ -31,6 +31,10 @@ public class Meal {
 
     public int getPrice() {
         return price;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getDiscountedPrice(int discount) {

@@ -5,9 +5,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import testing.Meal;
+import testing.meal.Meal;
 import testing.extensions.BeforeAfterExtension;
-import testing.order.Order;
 
 import java.util.Arrays;
 import java.util.List;

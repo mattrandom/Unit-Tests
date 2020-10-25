@@ -1,6 +1,6 @@
 package testing.cart;
 
-import testing.Meal;
+import testing.meal.Meal;
 import testing.order.Order;
 
 import java.util.ArrayList;
